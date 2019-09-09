@@ -40,7 +40,7 @@ public class SharedDelegate {
 			userSo.setUserName(userEntity.getUserName());
 			
 			if(userEntity.getCompanyId() != null) {
-				String companyName = getCompanyNameByUser(userEntity.getCompanyId());
+				String companyName = getCompanyNameByUser(userEntity.getCompanyId()).getCompanyName();
 				userSo.setCompanyName(companyName);
 			}
 			
@@ -52,31 +52,25 @@ public class SharedDelegate {
 	}
 	
 	protected UserSo getUserById(Long userId){
-		Optional<User> userEntity = userRepository.findById(userId);
+		User userEntity = userRepository.findById(userId).orElse(null);
 		UserSo userSo = new UserSo();
 		
-		if(userEntity.isPresent()) {
-			userSo.setId(userEntity.get().getId());
-			userSo.setFirstName(userEntity.get().getFirstName());
-			userSo.setLastName(userEntity.get().getLastName());
-			userSo.setUserName(userEntity.get().getUserName());
-			
-			if(userEntity.get().getCompanyId() != null) {
-				String companyName = getCompanyNameByUser(userEntity.get().getCompanyId());
-				userSo.setCompanyName(companyName);
-			}
+		
+		userSo.setId(userEntity.getId());
+		userSo.setFirstName(userEntity.getFirstName());
+		userSo.setLastName(userEntity.getLastName());
+		userSo.setUserName(userEntity.getUserName());
+		
+		if(userEntity.getCompanyId() != null) {
+			String companyName = getCompanyNameByUser(userEntity.getCompanyId()).getCompanyName();
+			userSo.setCompanyName(companyName);
 		}
 		
 		return userSo;
 	}
 	
-	protected String getCompanyNameByUser(Long companyId) {
-		Optional<Company> company = companyRepository.findById(companyId);
-		if(company.isPresent()) {
-			return company.get().getCompanyName();
-		}
-		
-		return null;
+	protected Company getCompanyNameByUser(Long companyId) {
+		return companyRepository.findById(companyId).orElse(null);
 	}
 	
 	protected Boolean createOrUpdateUser(UserSo userSo){
@@ -132,33 +126,29 @@ public class SharedDelegate {
 	}
 	
 	protected CompanySo getCompanyFromPost(Long companyId) {
-		Optional<Company> company = companyRepository.findById(companyId);
+		Company company = companyRepository.findById(companyId).orElse(null);
 		CompanySo companySo = new CompanySo();
 		
-		if(company.isPresent()) {
-			companySo.setCompanyName(company.get().getCompanyName());
-			companySo.setId(company.get().getId());
-			companySo.setCountry(company.get().getCountry());
-			companySo.setState(company.get().getState());
-		}
+		companySo.setCompanyName(company.getCompanyName());
+		companySo.setId(company.getId());
+		companySo.setCountry(company.getCountry());
+		companySo.setState(company.getState());
 		
 		return companySo;
 	}
 	
 	protected PostSo getPostById(Long postId) {
-		Optional<Post> post = postRepository.findById(postId);
+		Post post = postRepository.findById(postId).orElse(null);
 		PostSo postSo = new PostSo();
 		
-		if(post.isPresent()) {
-			postSo.setId(post.get().getId());
-			postSo.setDescription(post.get().getDescription());
-			postSo.setTitle(post.get().getTitle());
-			
-			postSo.setCompany(getCompanyFromPost(post.get().getCompanyId()));
-			
-			UserSo userSo = getUserById(post.get().getUserId());
-			postSo.setUser(userSo);
-		}
+		postSo.setId(post.getId());
+		postSo.setDescription(post.getDescription());
+		postSo.setTitle(post.getTitle());
+		
+		postSo.setCompany(getCompanyFromPost(post.getCompanyId()));
+		
+		UserSo userSo = getUserById(post.getUserId());
+		postSo.setUser(userSo);
 		
 		return postSo;
 	}
@@ -207,21 +197,19 @@ public class SharedDelegate {
 	}
 	
 	protected CompanySo getCompanyById(Long companyId) {
-		Optional<Company> company = companyRepository.findById(companyId);
+		Company company = companyRepository.findById(companyId).orElse(null);
 		CompanySo companySo = new CompanySo();
 		
-		if(company != null) {
-			companySo.setId(companyId);
-			companySo.setCompanyName(company.get().getCompanyName());
-			
-			if(!company.get().getState().isEmpty()) {
-				companySo.setState(company.get().getState());
-			} else {
-				companySo.setState(null);
-			}
-			
-			companySo.setPosts(getAllPostByCompanyId(company.get().getId()));
+		companySo.setId(companyId);
+		companySo.setCompanyName(company.getCompanyName());
+		
+		if(!company.getState().isEmpty()) {
+			companySo.setState(company.getState());
+		} else {
+			companySo.setState(null);
 		}
+			
+			companySo.setPosts(getAllPostByCompanyId(company.getId()));
 		
 		return companySo;
 	}
