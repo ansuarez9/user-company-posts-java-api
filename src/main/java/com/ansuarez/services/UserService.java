@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.ansuarez.models.UserSo;
-import com.ansuarez.shared.SharedDelegate;
+import com.ansuarez.shared.UserProvider;
 
 @Service
-public class UserService extends SharedDelegate {
+public class UserService extends UserProvider {
 
 	public ArrayList<UserSo> getAllUsers(){
 		return getListOfUsers();

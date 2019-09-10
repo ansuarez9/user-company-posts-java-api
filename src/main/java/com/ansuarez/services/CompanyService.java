@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.ansuarez.models.CompanySo;
-import com.ansuarez.shared.SharedDelegate;
+import com.ansuarez.shared.CompanyProvider;
 
 @Service
-public class CompanyService extends SharedDelegate {
+public class CompanyService extends CompanyProvider {
 
 	public ArrayList<CompanySo> getCompanies(){
 		return getAllCompanies();

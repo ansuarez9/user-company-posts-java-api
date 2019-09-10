@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.ansuarez.models.PostSo;
-import com.ansuarez.shared.SharedDelegate;
+import com.ansuarez.shared.PostProvider;
 
 @Service
-public class PostService extends SharedDelegate {
+public class PostService extends PostProvider {
 	
 	public ArrayList<PostSo> getAllPosts(){
 		return findAllPosts();
