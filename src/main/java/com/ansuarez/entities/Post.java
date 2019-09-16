@@ -1,13 +1,19 @@
 package com.ansuarez.entities;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity()
+@Table(name="post")
 public class Post extends Audit<String> {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -22,28 +28,28 @@ public class Post extends Audit<String> {
 	@Column(name="title")
 	private String title;
 	
-	@NotNull
-	@Column(name="companyId")
-	private Long companyId;
-	
-	@NotNull
-	@Column(name="userId")
-	private Long userId;
+	@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	@JoinColumn(name="companyId", nullable=false, referencedColumnName="id")
+	private Company company;
 
-	public Long getUserId() {
-		return userId;
+	@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	@JoinColumn(name="userId", nullable=true, referencedColumnName="id")
+	private User user;
+
+	public User getUser() {
+		return user;
 	}
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
-	public Long getCompanyId() {
-		return companyId;
+	public Company getCompany() {
+		return company;
 	}
 
-	public void setCompanyId(Long companyId) {
-		this.companyId = companyId;
+	public void setCompany(Company company) {
+		this.company = company;
 	}
 
 	public Long getId() {

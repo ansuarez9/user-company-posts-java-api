@@ -12,11 +12,10 @@ public class UserSo {
 	
 	private String userName;
 	
-	@Nullable
-	private String companyName;
+	private Long companyId;
 	
 	@Nullable
-	private Long companyId;
+	private CompanySo companySo;
 
 	public Long getId() {
 		return id;
@@ -50,12 +49,12 @@ public class UserSo {
 		this.userName = userName;
 	}
 
-	public String getCompanyName() {
-		return companyName;
+	public CompanySo getCompanySo() {
+		return companySo;
 	}
 
-	public void setCompanyName(String companyName) {
-		this.companyName = companyName;
+	public void setCompanySo(CompanySo companySo) {
+		this.companySo = companySo;
 	}
 
 	public Long getCompanyId() {

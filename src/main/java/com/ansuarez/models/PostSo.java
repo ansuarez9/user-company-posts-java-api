@@ -1,5 +1,7 @@
 package com.ansuarez.models;
 
+import org.springframework.lang.Nullable;
+
 public class PostSo {
 
 	private Long id;
@@ -7,14 +9,15 @@ public class PostSo {
 	private String description;
 	
 	private String title;
+
+	private Long userId;
 	
 	private Long companyId;
 	
-	private Long userId;
-	
-	private UserSo user;
-	
 	private CompanySo company;
+	
+	@Nullable
+	private UserSo user;
 
 	public Long getId() {
 		return id;
@@ -30,6 +33,14 @@ public class PostSo {
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	public Long getCompanyId() {
+		return companyId;
+	}
+
+	public void setCompanyId(Long companyId) {
+		this.companyId = companyId;
 	}
 
 	public String getDescription() {
@@ -54,14 +65,6 @@ public class PostSo {
 
 	public void setCompany(CompanySo company) {
 		this.company = company;
-	}
-
-	public Long getCompanyId() {
-		return companyId;
-	}
-
-	public void setCompanyId(Long companyId) {
-		this.companyId = companyId;
 	}
 
 	public UserSo getUser() {

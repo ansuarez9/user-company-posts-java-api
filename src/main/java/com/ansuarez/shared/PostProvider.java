@@ -24,10 +24,11 @@ public class PostProvider extends SharedProvider {
 			postSo.setDescription(post.getDescription());
 			postSo.setTitle(post.getTitle());
 			
-			postSo.setCompany(getCompanyFromPost(post.getCompanyId()));
+			postSo.setCompany(getCompanyFromPost(post.getCompany().getId()));
 			
-			UserSo userSo = getUserById(post.getUserId());
+			UserSo userSo = getUserById(post.getUser().getId());
 			postSo.setUser(userSo);
+			postSo.getUser().setCompanySo(null);
 			
 			postSos.add(postSo);
 		}
@@ -43,32 +44,37 @@ public class PostProvider extends SharedProvider {
 		postSo.setDescription(post.getDescription());
 		postSo.setTitle(post.getTitle());
 		
-		postSo.setCompany(getCompanyFromPost(post.getCompanyId()));
+		postSo.setCompany(getCompanyFromPost(post.getCompany().getId()));
 		
-		UserSo userSo = getUserById(post.getUserId());
+		UserSo userSo = getUserById(post.getUser().getId());
 		postSo.setUser(userSo);
 		
 		return postSo;
 	}
 	
 	protected Boolean createNewPost(PostSo postSo){
+		Post postEntity = new Post();
 		
-		if((postSo.getId() != null) && (postRepository.findById(postSo.getId()) != null)) {
+		if(postSo.getId() != null) {
 			throw new ResponseStatusException(HttpStatus.ALREADY_REPORTED, "Post with ID " + postSo.getId() + " already exists");
-		} else {
-			Post newPost = new Post();
-			newPost.setTitle(postSo.getTitle());
-			newPost.setDescription(postSo.getDescription());
-			newPost.setUserId(postSo.getUserId());
-			newPost.setCompanyId(postSo.getCompanyId());
-			
-			try {
-				postRepository.save(newPost);
-				return true;
-			} catch (Exception e) {
-				throw new RuntimeException("Error While Creating New Post");
-			}
 		}
+
+		postEntity.setTitle(postSo.getTitle());
+		postEntity.setDescription(postSo.getDescription());
+		
+		postEntity.setCompany(getCompanyEntityById(postSo.getCompanyId()));
+		
+		if(postSo.getUserId() != null) {
+			postEntity.setUser(getUserEntityById(postSo.getUserId()));
+		} 
+		
+		try {
+			postRepository.save(postEntity);
+			return true;
+		} catch (Exception e) {
+			throw new RuntimeException("Error While Creating New Post");
+		}
+		
 	}
 
 	protected CompanySo getCompanyFromPost(Long companyId) {

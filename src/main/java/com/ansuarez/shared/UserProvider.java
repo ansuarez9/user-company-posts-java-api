@@ -20,16 +20,12 @@ public class UserProvider extends SharedProvider {
 			userSo.setLastName(userEntity.getLastName());
 			userSo.setUserName(userEntity.getUserName());
 			
-			if(userEntity.getCompanyId() != null) {
-				String companyName = getCompanyNameByUser(userEntity.getCompanyId()).getCompanyName();
-				userSo.setCompanyName(companyName);
-			}
+			userSo.setCompanySo(getCompanySoFromUserEntity(userEntity));
 			
 			userSos.add(userSo);
 		}
 		
 		return userSos;
-		
 	}
 	
 	protected Boolean createOrUpdateUser(UserSo userSo){
@@ -43,7 +39,10 @@ public class UserProvider extends SharedProvider {
 		userEntity.setFirstName(userSo.getFirstName());
 		userEntity.setLastName(userSo.getLastName());
 		userEntity.setUserName(userSo.getUserName());
-		userEntity.setCompanyId(userSo.getCompanyId());
+		
+		if(userSo.getCompanyId() != null) {
+			userEntity.setCompany(getCompanyEntityById(userSo.getCompanyId()));
+		}
 		
 		try {
 			userRepository.save(userEntity);

@@ -22,7 +22,7 @@ public class CompanyProvider extends SharedProvider {
 		companyEntity.setCompanyName(companySo.getCompanyName());
 		companyEntity.setCountry(companySo.getCountry());
 		
-		if(!companySo.getState().isEmpty()) {
+		if(companySo.getState() != null) {
 			companyEntity.setState(companySo.getState());
 		} else {
 			companyEntity.setState(null);
@@ -46,7 +46,7 @@ public class CompanyProvider extends SharedProvider {
 			companySo.setCompanyName(company.getCompanyName());
 			companySo.setCountry(company.getCountry());
 			
-			if(!company.getState().isEmpty()) {
+			if(company.getState() != null) {
 				companySo.setState(company.getState());
 			} else {
 				companySo.setState(null);
@@ -86,7 +86,8 @@ public class CompanyProvider extends SharedProvider {
 			postSo.setId(post.getId());
 			postSo.setDescription(post.getDescription());
 			postSo.setTitle(post.getTitle());
-			postSo.setUser(getUserById(post.getUserId()));
+			postSo.setUser(getUserById(post.getUser().getId()));
+			postSo.getUser().setCompanySo(null);
 			postSos.add(postSo);
 		}
 		
